@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch Example</title>
+</head>
+<body>
+
+  <h1>Fetch Example</h1>
+
+  <button onclick="fetchData('http://localhost:3000/missing-cors')">Fetch Data missing-cors</button>
+  <button onclick="fetchData('http://localhost:3000/having-cors')">Fetch Data having-cors</button>
+
+  <br /><br />
+
+  <button onclick="fetchDataAuth('http://localhost:3000/auth/missing-cors')">Fetch Data with Auth missing-cors</button>
+  <button onclick="fetchDataAuth('http://localhost:3000/auth/having-cors')">Fetch Data with Auth having-cors</button>
+
+  <hr />
+
+  Response:
+  <div id="response" style="border: 1px solid red;"></div>
+
+  <script>
+    function fetchData(url) {
+        fetch(url).then(response => {
+            if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById("response").innerHTML = "Success: " + JSON.stringify(data);
+            })
+            .catch(error => {
+                document.getElementById("response").innerHTML = "ERROR: " + JSON.stringify(error);
+            });
+    }
+
+    function fetchDataAuth(url) {
+        const token = "foo";
+        fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById("response").innerHTML = "Success: " + JSON.stringify(data);
+        })
+        .catch(error => {
+            document.getElementById("response").innerHTML = "ERROR: " + JSON.stringify(error);
+        });
+    }
+  </script>
+
+</body>
+</html>
